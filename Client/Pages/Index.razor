@@ -1,0 +1,40 @@
+﻿@page "/"
+
+@attribute [Authorize]
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView Policy="RequireAdmin">
+    <Authorized>
+        <h2>Hello @context.User.Identity.Name, here's the list of your claims:</h2>
+        <h3>Is in admin role yes</h3>
+        <h3>Admin Role = @context.User.IsInRole("Admin").ToString()</h3>
+        <h3>User Role = @context.User.IsInRole("User").ToString()</h3>
+        <h3>Authenticated @context.User.Identity.IsAuthenticated.ToString()</h3>
+        <ul>
+            @foreach (var claim in context.User.Claims) {
+                <li><b>@claim.Type</b>: @claim.Value</li>
+            }
+        </ul>
+    </Authorized>
+    <NotAuthorized>
+        <p>Admin I'm sorry, I can't display any claims until you log in</p>
+    </NotAuthorized>
+</AuthorizeView>
+<AuthorizeView Roles="User">
+    <Authorized>
+        <h2>Hello @context.User.Identity.Name, here's the list of your claims:</h2>
+        <h3>Is in user role yes</h3>
+        @context.User.Identity.
+        <ul>
+            @foreach (var claim in context.User.Claims) {
+                <li><b>@claim.Type</b>: @claim.Value</li>
+            }
+        </ul>
+    </Authorized>
+    <NotAuthorized>
+        <p>User I'm sorry, I can't display any claims until you log in</p>
+    </NotAuthorized>
+</AuthorizeView>
